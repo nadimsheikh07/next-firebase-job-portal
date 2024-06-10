@@ -1,6 +1,6 @@
 "use client";
 
-import { db } from "@/config/firebase";
+import { DB } from "@/config/firebase";
 import { collection, getDocs } from "firebase/firestore";
 import Head from "next/head";
 import Link from "next/link";
@@ -8,12 +8,12 @@ import { useEffect, useState } from "react";
 
 export default function Page() {
 
-    const [tasks, setTasks] = useState([]);
+    const [vacancies, setVacancies] = useState([]);
 
-    const getTasks = async () => {
-        const col = collection(db, "tasks");
+    const getData = async () => {
+        const col = collection(DB, "vacancies");
         const snapshot = await getDocs(col);
-        setTasks(snapshot.docs.map(doc => {
+        setVacancies(snapshot.docs.map(doc => {
             return {
                 id: doc.id,
                 ...doc.data()
@@ -22,23 +22,17 @@ export default function Page() {
     }
 
     useEffect(() => {
-        getTasks()
+        getData()
     }, [])
 
     return (
         <>
             <div className="container mx-auto mt-8 max-w-[560px]">
                 <div className="flex justify-between items-center pb-4 border-b border-dashed border-gray-900 mb-4">
-                    <h1 className="text-3xl font-semibold">Tasks</h1>
-                    <Link
-                        className="bg-green-600 hover:bg-opacity-80 text-white rounded-lg px-4 py-2 duration-200"
-                        href="/task/create"
-                    >
-                        Create New
-                    </Link>
+                    <h1 className="text-3xl font-semibold">vacancies</h1>
                 </div>
                 <ul>
-                    {tasks.map((task) => (
+                    {vacancies.map((task) => (
                         <li key={task.id} className="py-2 flex justify-between w-full">
                             <span>
                                 <strong>{task.name}</strong> - {task.description}
@@ -49,11 +43,11 @@ export default function Page() {
                             </span>
                         </li>
                     ))}
-                    {tasks?.length < 1 && <div className="py-2">No data</div>}
+                    {vacancies?.length < 1 && <div className="py-2">No data</div>}
                 </ul>
             </div>
             <Head>
-                <title>Task</title>
+                <title>Vacancies</title>
             </Head>
         </>
     );

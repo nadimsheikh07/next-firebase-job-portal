@@ -1,4 +1,5 @@
 import { initializeApp } from "firebase/app";
+import { getAuth } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 
 const firebaseConfig = {
@@ -9,11 +10,10 @@ const firebaseConfig = {
     messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
     appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
     measurementId: process.env.NEXT_PUBLIC_MEASUREMENT_ID,
-
 };
 
+const APP = initializeApp(firebaseConfig);
+const DB = getFirestore(APP);
+const AUTH = getAuth(APP);
 
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
-
-export { db };
+export { DB, AUTH };
