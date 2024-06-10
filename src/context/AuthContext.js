@@ -80,21 +80,29 @@ function AuthProvider({ children }) {
         return await signInWithEmailAndPassword(AUTH, email, password)
     };
 
-    const signUp = async (email, password, firstName, lastName) => {
-        const res = await createUserWithEmailAndPassword(AUTH, email, password)
+    const signUp = async (data) => {
+        const { email, password, firstName, lastName } = data;
 
-        if (res && res.user) {
-            const userRef = doc(collection(DB, 'users'), res.user?.uid);
+        try {
+            
+            const res = await createUserWithEmailAndPassword(AUTH, email, password);
+            
+            if (res && res.user) {                
+                const userRef = doc(collection(DB, 'users'), res.user.uid);
+                
+                await setDoc(userRef, {
+                    uid: res.user.uid,
+                    email,
+                    displayName: `${firstName} ${lastName}`,
+                });
+            }
 
-            await setDoc(userRef, {
-                uid: res.user?.uid,
-                email,
-                displayName: `${firstName} ${lastName}`,
-            });
-        } 
-
-        return res
-    }
+            return res;
+        } catch (error) {
+            console.error('Error signing up:', error);
+            throw error; // Re-throw the error after logging it
+        }
+    };
 
     const logout = () => signOut(AUTH);
 

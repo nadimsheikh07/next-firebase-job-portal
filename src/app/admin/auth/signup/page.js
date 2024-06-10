@@ -5,15 +5,19 @@ import { Box, Button, Divider, Stack, TextField } from "@mui/material";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 const SignUpForm = () => {
     const { signUp } = useAuth();
+    const router = useRouter();
+
     const { register, handleSubmit, formState: { errors } } = useForm();
     const [firebaseError, setFirebaseError] = useState('');
 
     const onSubmit = async (data) => {
-        try {            
-            await signUp(data.email, data.password);
+        try {
+            await signUp(data);
+            router.push("/admin/auth/signin")
         } catch (error) {
             console.error("Error signUpg in:", error);
             setFirebaseError(error.message);
@@ -32,6 +36,30 @@ const SignUpForm = () => {
                     {...register("email", { required: "Email is required" })}
                     error={!!errors.email}
                     helperText={errors.email ? errors.email.message : ''}
+                />
+            </Box>
+            <Box mt={2}>
+                <TextField
+                    label="First Name"
+                    variant="outlined"
+                    id="firstName"
+                    type="text"
+                    fullWidth
+                    {...register("firstName", { required: "First Name is required" })}
+                    error={!!errors.firstName}
+                    helperText={errors.firstName ? errors.firstName.message : ''}
+                />
+            </Box>
+            <Box mt={2}>
+                <TextField
+                    label="Last Name"
+                    variant="outlined"
+                    id="lastName"
+                    type="text"
+                    fullWidth
+                    {...register("lastName", { required: "Last Name is required" })}
+                    error={!!errors.lastName}
+                    helperText={errors.lastName ? errors.lastName.message : ''}
                 />
             </Box>
 
