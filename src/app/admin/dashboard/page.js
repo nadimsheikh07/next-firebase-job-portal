@@ -1,19 +1,18 @@
 "use client";
 
 import { DB } from "@/config/firebase";
+import { DataGrid } from '@mui/x-data-grid';
 import { collection, getDocs } from "firebase/firestore";
-import Head from "next/head";
-import Link from "next/link";
 import { useEffect, useState } from "react";
 
 export default function Page() {
 
-    const [vacancies, setVacancies] = useState([]);
+    const [users, setUsers] = useState([]);
 
     const getData = async () => {
-        const col = collection(DB, "vacancies");
+        const col = collection(DB, "users");
         const snapshot = await getDocs(col);
-        setVacancies(snapshot.docs.map(doc => {
+        setUsers(snapshot.docs.map(doc => {
             return {
                 id: doc.id,
                 ...doc.data()
@@ -25,30 +24,14 @@ export default function Page() {
         getData()
     }, [])
 
+    const columns = [
+        { field: 'displayName', headerName: 'Display Name', width: 150 },
+        { field: 'email', headerName: 'Email', width: 150 },
+    ];
+
     return (
         <>
-            <div className="container mx-auto mt-8 max-w-[560px]">
-                <div className="flex justify-between items-center pb-4 border-b border-dashed border-gray-900 mb-4">
-                    <h1 className="text-3xl font-semibold">vacancies</h1>
-                </div>
-                <ul>
-                    {vacancies.map((task) => (
-                        <li key={task.id} className="py-2 flex justify-between w-full">
-                            <span>
-                                <strong>{task.name}</strong> - {task.description}
-                            </span>
-                            <span className="flex gap-2">
-                                <Link className="text-blue-700 underline hover:no-underline" href={`/${task.id}/edit`}>Edit</Link>
-                                <Link className="text-red-500 underline hover:no-underline" href={`/${task.id}/delete`}>Delete</Link>
-                            </span>
-                        </li>
-                    ))}
-                    {vacancies?.length < 1 && <div className="py-2">No data</div>}
-                </ul>
-            </div>
-            <Head>
-                <title>Vacancies</title>
-            </Head>
+            <DataGrid rows={users} columns={columns} />
         </>
     );
 }
