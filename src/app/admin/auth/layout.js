@@ -1,3 +1,5 @@
+"use client";
+
 import { AuthProvider } from "@/context/AuthContext";
 import { Box, Container } from "@mui/material";
 

@@ -84,12 +84,12 @@ function AuthProvider({ children }) {
         const { email, password, firstName, lastName } = data;
 
         try {
-            
+
             const res = await createUserWithEmailAndPassword(AUTH, email, password);
-            
-            if (res && res.user) {                
+
+            if (res && res.user) {
                 const userRef = doc(collection(DB, 'users'), res.user.uid);
-                
+
                 await setDoc(userRef, {
                     uid: res.user.uid,
                     email,
