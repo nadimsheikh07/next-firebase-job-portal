@@ -1,9 +1,9 @@
 "use client";
 
 import { DB } from "@/config/firebase";
+import { appName } from "@/utils/setting";
+import { Box, Button, Card, CardActions, CardContent, CardHeader, Container, Grid, Typography } from "@mui/material";
 import { collection, getDocs } from "firebase/firestore";
-import Head from "next/head";
-import Link from "next/link";
 import { useEffect, useState } from "react";
 
 export default function Page() {
@@ -26,29 +26,25 @@ export default function Page() {
     }, [])
 
     return (
-        <>
-            <div className="container mx-auto mt-8 max-w-[560px]">
-                <div className="flex justify-between items-center pb-4 border-b border-dashed border-gray-900 mb-4">
-                    <h1 className="text-3xl font-semibold">vacancies</h1>
-                </div>
-                <ul>
-                    {vacancies.map((task) => (
-                        <li key={task.id} className="py-2 flex justify-between w-full">
-                            <span>
-                                <strong>{task.name}</strong> - {task.description}
-                            </span>
-                            <span className="flex gap-2">
-                                <Link className="text-blue-700 underline hover:no-underline" href={`/${task.id}/edit`}>Edit</Link>
-                                <Link className="text-red-500 underline hover:no-underline" href={`/${task.id}/delete`}>Delete</Link>
-                            </span>
-                        </li>
-                    ))}
-                    {vacancies?.length < 1 && <div className="py-2">No data</div>}
-                </ul>
-            </div>
-            <Head>
-                <title>Vacancies</title>
-            </Head>
-        </>
+        <Container>
+            <Box mt={5} mb={5}>
+                <Typography>{appName}</Typography>
+            </Box>
+            <Grid container spacing={2}>
+                {vacancies && vacancies.map((vacancy, index) => (
+                    <Grid key={`vacancy-${index}`} item xs={12} sm={12} md={4} lg={4}>
+                        <Card>
+                            <CardHeader title={vacancy.title} />
+                            <CardContent>
+                                <Typography>{vacancy.description}</Typography>
+                            </CardContent>
+                            <CardActions>
+                                <Button>Apply</Button>
+                            </CardActions>
+                        </Card>
+                    </Grid>
+                ))}
+            </Grid>
+        </Container>
     );
 }
