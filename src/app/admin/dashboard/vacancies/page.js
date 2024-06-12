@@ -1,14 +1,13 @@
 "use client";
 
 import { DB } from "@/config/firebase";
+import DeleteIcon from '@mui/icons-material/DeleteOutlined';
+import EditIcon from '@mui/icons-material/Edit';
+import { Box, Button } from "@mui/material";
 import { DataGrid, GridActionsCellItem } from '@mui/x-data-grid';
 import { collection, deleteDoc, doc, getDocs } from "firebase/firestore";
-import { useEffect, useState } from "react";
-
-import EditIcon from '@mui/icons-material/Edit';
-import DeleteIcon from '@mui/icons-material/DeleteOutlined';
 import { useRouter } from "next/navigation";
-import { Button } from "@mui/material";
+import { useEffect, useState } from "react";
 
 export default function Page() {
     const router = useRouter();
@@ -33,7 +32,8 @@ export default function Page() {
     const handleNewClick = () => {
         router.push(`/admin/dashboard/vacancies/form/new`)
     }
-    const handleEditClick = (id) => {        
+
+    const handleEditClick = (id) => {
         router.push(`/admin/dashboard/vacancies/form/${id}`)
     }
 
@@ -50,7 +50,7 @@ export default function Page() {
 
     const columns = [
         { field: 'title', headerName: 'Title', width: 150 },
-        { field: 'location', headerName: 'location', width: 150 },
+        { field: 'location', headerName: 'Location', width: 150 },
         {
             field: 'actions',
             type: 'actions',
@@ -81,9 +81,12 @@ export default function Page() {
     ];
 
     return (
-        <>
-            <Button onClick={() => handleNewClick()}>New</Button>
+        <Box>
+            <Box mb={2}>
+                <Button variant="outlined" onClick={() => handleNewClick()}>Create</Button>
+            </Box>
+
             <DataGrid rows={vacancies} columns={columns} />
-        </>
+        </Box>
     );
 }
