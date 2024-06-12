@@ -1,13 +1,11 @@
 "use client";
 
 import { DB } from "@/config/firebase";
-import { DataGrid, GridActionsCellItem } from '@mui/x-data-grid';
-import { collection, deleteDoc, doc, getDocs } from "firebase/firestore";
+import { collection, getDocs } from "firebase/firestore";
 import { useEffect, useState } from "react";
 
-import EditIcon from '@mui/icons-material/Edit';
-import DeleteIcon from '@mui/icons-material/DeleteOutlined';
 import { Typography } from "@mui/material";
+import { BarChart } from '@mui/x-charts/BarChart';
 
 export default function Page() {
 
@@ -32,6 +30,13 @@ export default function Page() {
     return (
         <>
             <Typography>Dashboard</Typography>
+
+            <BarChart
+                xAxis={[{ scaleType: 'band', data: ['group A', 'group B', 'group C'] }]}
+                series={[{ data: [4, 3, 5] }, { data: [1, 6, 3] }, { data: [2, 5, 6] }]}
+                width={500}
+                height={300}
+            />
         </>
     );
 }
