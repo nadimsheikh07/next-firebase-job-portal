@@ -34,7 +34,7 @@ const AppBar = styled(MuiAppBar, {
 export default function AdminMenuAppBar({ open, handleDrawerOpen }) {
     const [anchorEl, setAnchorEl] = React.useState(null);
 
-    const { isAuthenticated, user } = useAuth()
+    const { isAuthenticated, logout } = useAuth()
 
     const handleMenu = (event) => {
         setAnchorEl(event.currentTarget);
@@ -42,6 +42,11 @@ export default function AdminMenuAppBar({ open, handleDrawerOpen }) {
 
     const handleClose = () => {
         setAnchorEl(null);
+    };
+
+    const handleLogout = () => {
+        setAnchorEl(null);
+        logout()
     };
 
     return (
@@ -93,7 +98,7 @@ export default function AdminMenuAppBar({ open, handleDrawerOpen }) {
                             onClose={handleClose}
                         >
                             <MenuItem onClick={handleClose}>Profile</MenuItem>
-                            <MenuItem onClick={handleClose}>My account</MenuItem>
+                            <MenuItem onClick={() => handleLogout()}>Logout</MenuItem>
                         </Menu>
                     </div>
                 )}

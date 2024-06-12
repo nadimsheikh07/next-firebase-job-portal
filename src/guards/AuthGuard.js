@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import useAuth from '@/hooks/useAuth';
+import SignInForm from '@/components/auth/signIn';
 
 AuthGuard.propTypes = {
     children: PropTypes.node,
@@ -33,7 +34,10 @@ export default function AuthGuard({ children }) {
         if (pathname !== requestedLocation) {
             setRequestedLocation(pathname);
         }
-        push('/admin/auth/signin')
+
+        return (
+            <SignInForm />
+        )
     }
 
     return <>{children}</>;
