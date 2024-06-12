@@ -2,8 +2,8 @@
 
 import { AUTH, DB } from "@/config/firebase";
 import { Box, Button, Stack, TextField } from "@mui/material";
-import { createUserWithEmailAndPassword, updateCurrentUser, updatePassword } from "firebase/auth";
-import { addDoc, collection, doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import { collection, doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
