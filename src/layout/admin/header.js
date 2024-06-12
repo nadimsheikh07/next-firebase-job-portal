@@ -1,15 +1,35 @@
 "use client";
 
-import AppBar from '@mui/material/AppBar';
+import useAuth from '@/hooks/useAuth';
+import { appName, drawerWidth } from '@/utils/setting';
+import AccountCircle from '@mui/icons-material/AccountCircle';
+import MenuIcon from '@mui/icons-material/Menu';
+import MuiAppBar from '@mui/material/AppBar';
+import IconButton from '@mui/material/IconButton';
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
-import IconButton from '@mui/material/IconButton';
-import MenuIcon from '@mui/icons-material/Menu';
-import AccountCircle from '@mui/icons-material/AccountCircle';
-import MenuItem from '@mui/material/MenuItem';
-import Menu from '@mui/material/Menu';
+import { styled } from '@mui/material/styles';
 import React from 'react';
-import useAuth from '@/hooks/useAuth';
+
+const AppBar = styled(MuiAppBar, {
+    shouldForwardProp: (prop) => prop !== 'open',
+})(({ theme, open }) => ({
+    zIndex: theme.zIndex.drawer + 1,
+    transition: theme.transitions.create(['width', 'margin'], {
+        easing: theme.transitions.easing.sharp,
+        duration: theme.transitions.duration.leavingScreen,
+    }),
+    ...(open && {
+        marginLeft: drawerWidth,
+        width: `calc(100% - ${drawerWidth}px)`,
+        transition: theme.transitions.create(['width', 'margin'], {
+            easing: theme.transitions.easing.sharp,
+            duration: theme.transitions.duration.enteringScreen,
+        }),
+    }),
+}));
 
 export default function AdminMenuAppBar({ open, handleDrawerOpen }) {
     const [anchorEl, setAnchorEl] = React.useState(null);
@@ -35,14 +55,14 @@ export default function AdminMenuAppBar({ open, handleDrawerOpen }) {
                     edge="start"
                     sx={{
                         marginRight: 10,
-                        // ...(open && { display: 'none' }),
+                        ...(open && { display: 'none' }),
                     }}
                 >
                     <MenuIcon />
                 </IconButton>
 
                 <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-                    Job Portal
+                    {appName}
                 </Typography>
 
                 {isAuthenticated && (

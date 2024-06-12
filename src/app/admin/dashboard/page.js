@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/DeleteOutlined';
+import { Typography } from "@mui/material";
 
 export default function Page() {
 
@@ -27,57 +28,10 @@ export default function Page() {
         getData()
     }, [])
 
-    const handleEditClick = (id) => {
-        console.log('handleEditClick', id)
-    }
-
-    const handleDeleteClick = async (id) => {
-        console.log('handleDeleteClick', id)
-        try {
-            const userRef = doc(DB, 'users', id);
-            await deleteDoc(userRef);
-            getData()
-            console.log(`User with UID: ${id} has been deleted.`);
-        } catch (error) {
-            console.error('Error deleting user:', error);
-        }
-    }
-
-    const columns = [
-        { field: 'displayName', headerName: 'Display Name', width: 150 },
-        { field: 'email', headerName: 'Email', width: 150 },
-        {
-            field: 'actions',
-            type: 'actions',
-            headerName: 'Actions',
-            width: 100,
-            cellClassName: 'actions',
-            getActions: ({ id }) => {
-
-                return [
-                    <GridActionsCellItem
-                        key={`edit-${id}`}
-                        icon={<EditIcon />}
-                        label="Edit"
-                        className="textPrimary"
-                        onClick={() => handleEditClick(id)}
-                        color="inherit"
-                    />,
-                    <GridActionsCellItem
-                        key={`delete-${id}`}
-                        icon={<DeleteIcon />}
-                        label="Delete"
-                        onClick={() => handleDeleteClick(id)}
-                        color="inherit"
-                    />,
-                ];
-            },
-        }
-    ];
 
     return (
         <>
-            <DataGrid rows={users} columns={columns} />
+            <Typography>Dashboard</Typography>
         </>
     );
 }
