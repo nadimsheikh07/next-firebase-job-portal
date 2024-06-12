@@ -7,8 +7,11 @@ import { useEffect, useState } from "react";
 
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/DeleteOutlined';
+import { useRouter } from "next/navigation";
+import { Button } from "@mui/material";
 
 export default function Page() {
+    const router = useRouter();
 
     const [vacancies, setVacancies] = useState([]);
 
@@ -27,12 +30,14 @@ export default function Page() {
         getData()
     }, [])
 
-    const handleEditClick = (id) => {
-        console.log('handleEditClick', id)
+    const handleNewClick = () => {
+        router.push(`/admin/dashboard/vacancies/form/new`)
+    }
+    const handleEditClick = (id) => {        
+        router.push(`/admin/dashboard/vacancies/form/${id}`)
     }
 
     const handleDeleteClick = async (id) => {
-        console.log('handleDeleteClick', id)
         try {
             const userRef = doc(DB, 'vacancies', id);
             await deleteDoc(userRef);
@@ -77,6 +82,7 @@ export default function Page() {
 
     return (
         <>
+            <Button onClick={() => handleNewClick()}>New</Button>
             <DataGrid rows={vacancies} columns={columns} />
         </>
     );
