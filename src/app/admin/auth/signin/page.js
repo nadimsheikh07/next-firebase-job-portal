@@ -17,7 +17,6 @@ const SignInForm = () => {
     const onSubmit = async (data) => {
         try {
             const response = await login(data.email, data.password);
-            console.log('response', response)
             router.push("/admin/dashboard")
         } catch (error) {
             console.error("Error signing in:", error);

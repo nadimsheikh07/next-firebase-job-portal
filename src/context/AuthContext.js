@@ -84,7 +84,6 @@ function AuthProvider({ children }) {
         const { email, password, firstName, lastName } = data;
 
         try {
-
             const res = await createUserWithEmailAndPassword(AUTH, email, password);
 
             if (res && res.user) {
@@ -93,7 +92,8 @@ function AuthProvider({ children }) {
                 await setDoc(userRef, {
                     uid: res.user.uid,
                     email,
-                    displayName: `${firstName} ${lastName}`,
+                    firstName,
+                    lastName
                 });
             }
 
@@ -115,7 +115,7 @@ function AuthProvider({ children }) {
                     id: state?.user?.uid,
                     email: state?.user?.email,
                     photoURL: state?.user?.photoURL || profile?.photoURL,
-                    displayName: state?.user?.displayName || profile?.displayName,
+                    displayName: `${state?.user?.firstName} ${state?.user?.lastName}` || profile?.displayName,
                     role: ADMIN_EMAILS.includes(state?.user?.email) ? 'admin' : 'user',
                     phoneNumber: state?.user?.phoneNumber || profile?.phoneNumber || '',
                     country: profile?.country || '',

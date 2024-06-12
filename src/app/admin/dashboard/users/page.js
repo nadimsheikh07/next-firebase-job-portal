@@ -1,14 +1,16 @@
 "use client";
 
 import { DB } from "@/config/firebase";
+import DeleteIcon from '@mui/icons-material/DeleteOutlined';
+import EditIcon from '@mui/icons-material/Edit';
+import { Box, Button } from "@mui/material";
 import { DataGrid, GridActionsCellItem } from '@mui/x-data-grid';
 import { collection, deleteDoc, doc, getDocs } from "firebase/firestore";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
-import EditIcon from '@mui/icons-material/Edit';
-import DeleteIcon from '@mui/icons-material/DeleteOutlined';
-
 export default function Page() {
+    const router = useRouter()
 
     const [users, setUsers] = useState([]);
 
@@ -27,12 +29,15 @@ export default function Page() {
         getData()
     }, [])
 
+    const handleNewClick = () => {
+        router.push(`/admin/dashboard/users/form/new`)
+    }
+
     const handleEditClick = (id) => {
-        console.log('handleEditClick', id)
+        router.push(`/admin/dashboard/users/form/${id}`)
     }
 
     const handleDeleteClick = async (id) => {
-        console.log('handleDeleteClick', id)
         try {
             const userRef = doc(DB, 'users', id);
             await deleteDoc(userRef);
@@ -44,7 +49,8 @@ export default function Page() {
     }
 
     const columns = [
-        { field: 'displayName', headerName: 'Display Name', width: 150 },
+        { field: 'firstName', headerName: 'First Name', width: 150 },
+        { field: 'lastName', headerName: 'Last Name', width: 150 },
         { field: 'email', headerName: 'Email', width: 150 },
         {
             field: 'actions',
@@ -76,8 +82,11 @@ export default function Page() {
     ];
 
     return (
-        <>
+        <Box>
+            <Box mb={2}>
+                <Button variant="outlined" onClick={() => handleNewClick()}>Create</Button>
+            </Box>
             <DataGrid rows={users} columns={columns} />
-        </>
+        </Box>
     );
 }
