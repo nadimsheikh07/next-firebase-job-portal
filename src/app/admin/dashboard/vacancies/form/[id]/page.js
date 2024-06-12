@@ -18,7 +18,13 @@ export default function Page({ params }) {
         setValue,
         watch,
         formState: { errors },
-    } = useForm()
+    } = useForm({
+        defaultValues: {
+            title: '',
+            location: '',
+            description: ''
+        }
+    })
 
     const onSubmit = async (data) => {
         if (id == "new") {
