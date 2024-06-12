@@ -1,14 +1,16 @@
 "use client";
 
 import { DB } from "@/config/firebase";
-import { Box, Button, Stack, TextField } from "@mui/material";
+import { Alert, Box, Button, Stack, TextField } from "@mui/material";
 import { addDoc, doc, getDoc, updateDoc } from "firebase/firestore";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 
 export default function Page({ params }) {
+    const [firebaseError, setFirebaseError] = useState('');
+
     const { id } = params
     const router = useRouter()
 
@@ -27,14 +29,19 @@ export default function Page({ params }) {
     })
 
     const onSubmit = async (data) => {
-        if (id == "new") {
-            const docRef = doc(DB, 'vacancies');
-            await addDoc(docRef, data);
-        } else {
-            const docRef = doc(DB, 'vacancies', id);
-            await updateDoc(docRef, data);
+        try {
+            if (id == "new") {
+                const docRef = doc(DB, 'vacancies');
+                await addDoc(docRef, data);
+            } else {
+                const docRef = doc(DB, 'vacancies', id);
+                await updateDoc(docRef, data);
+            }
+            router.push('/admin/dashboard/vacancies')
+        } catch (error) {
+            console.error("Error signUpg in:", error);
+            setFirebaseError(error.message);
         }
-        router.push('/admin/dashboard/vacancies')
     }
 
     const getData = async () => {
@@ -72,6 +79,11 @@ export default function Page({ params }) {
                     <TextField variant="outlined" label="Description" defaultValue="" {...register("description", { required: "Description is required" })} fullWidth error={errors.description} helperText={errors.description && errors.description.message} />
                 </Box>
 
+                {firebaseError && (
+                    <Box mt={2} mb={2}>
+                        <Alert severity="error">{firebaseError}</Alert>
+                    </Box>
+                )}
                 <Stack direction="row" spacing={2}>
                     <Button variant="outlined" type="submit">Submit</Button>
                     <Button variant="outlined" color="error" component={Link} href="/admin/dashboard/vacancies">Cancel</Button>

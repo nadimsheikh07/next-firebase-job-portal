@@ -1,7 +1,7 @@
 "use client";
 
 import { AUTH, DB } from "@/config/firebase";
-import { Box, Button, Stack, TextField } from "@mui/material";
+import { Alert, Box, Button, Stack, TextField } from "@mui/material";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { collection, doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
 import Link from "next/link";
@@ -117,7 +117,7 @@ export default function Page({ params }) {
                         helperText={errors.lastName ? errors.lastName.message : ''}
                     />
                 </Box>
-                
+
                 <Box mt={2} mb={2}>
                     <TextField
                         label="Phone Number"
@@ -145,8 +145,8 @@ export default function Page({ params }) {
                 </Box>
 
                 {firebaseError && (
-                    <Box mt={2}>
-                        <p style={{ color: 'red' }}>{firebaseError}</p>
+                    <Box mt={2} mb={2}>
+                        <Alert severity="error">{firebaseError}</Alert>
                     </Box>
                 )}
 
