@@ -72,6 +72,7 @@ export default function Page({ params }) {
         if (id != "new") {
             getData()
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
     return (

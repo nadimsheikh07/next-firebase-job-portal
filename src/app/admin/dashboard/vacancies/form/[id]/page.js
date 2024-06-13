@@ -2,7 +2,7 @@
 
 import { DB } from "@/config/firebase";
 import { Alert, Box, Button, Stack, TextField } from "@mui/material";
-import { addDoc, doc, getDoc, updateDoc } from "firebase/firestore";
+import { addDoc, collection, doc, getDoc, updateDoc } from "firebase/firestore";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -31,8 +31,8 @@ export default function Page({ params }) {
     const onSubmit = async (data) => {
         try {
             if (id == "new") {
-                const docRef = doc(DB, 'vacancies');
-                await addDoc(docRef, data);
+                const collectionRef = collection(DB, 'vacancies');
+                await addDoc(collectionRef, data);
             } else {
                 const docRef = doc(DB, 'vacancies', id);
                 await updateDoc(docRef, data);
