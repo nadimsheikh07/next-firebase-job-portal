@@ -62,13 +62,13 @@ export default function Page() {
 
             {firebaseError && (
                 <Box mt={2} mb={2}>
-                    <Alert severity="error">{firebaseError}</Alert>
+                    <Alert severity="error" onClose={() => { setFirebaseError("") }}>{firebaseError}</Alert>
                 </Box>
             )}
-            
+
             {firebaseSuccess && (
                 <Box mt={2} mb={2}>
-                    <Alert severity="success">{firebaseSuccess}</Alert>
+                    <Alert severity="success" onClose={() => { setFirebaseSuccess("") }}>{firebaseSuccess}</Alert>
                 </Box>
             )}
 

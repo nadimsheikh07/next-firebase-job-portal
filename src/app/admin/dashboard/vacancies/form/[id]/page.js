@@ -81,10 +81,10 @@ export default function Page({ params }) {
 
                 {firebaseError && (
                     <Box mt={2} mb={2}>
-                        <Alert severity="error">{firebaseError}</Alert>
+                        <Alert severity="error" onClose={() => { setFirebaseError("") }}>{firebaseError}</Alert>
                     </Box>
                 )}
-                
+
                 <Stack direction="row" spacing={2}>
                     <Button variant="outlined" type="submit">Submit</Button>
                     <Button variant="outlined" color="error" component={Link} href="/admin/dashboard/vacancies">Cancel</Button>

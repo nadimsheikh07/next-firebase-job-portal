@@ -147,7 +147,7 @@ export default function Page({ params }) {
 
                 {firebaseError && (
                     <Box mt={2} mb={2}>
-                        <Alert severity="error">{firebaseError}</Alert>
+                        <Alert severity="error" onClose={() => { setFirebaseError("") }}>{firebaseError}</Alert>
                     </Box>
                 )}
 
