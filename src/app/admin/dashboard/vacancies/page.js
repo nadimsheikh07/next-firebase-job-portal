@@ -1,6 +1,7 @@
 "use client";
 
 import { DB } from "@/config/firebase";
+import { useConfirmationDialog } from "@/context/ConfirmationDialogContext";
 import DeleteIcon from '@mui/icons-material/DeleteOutlined';
 import EditIcon from '@mui/icons-material/Edit';
 import { Box, Button } from "@mui/material";
@@ -11,6 +12,7 @@ import { useEffect, useState } from "react";
 
 export default function Page() {
     const router = useRouter();
+    const { openDialog } = useConfirmationDialog();
 
     const [vacancies, setVacancies] = useState([]);
 
@@ -37,15 +39,26 @@ export default function Page() {
         router.push(`/admin/dashboard/vacancies/form/${id}`)
     }
 
-    const handleDeleteClick = async (id) => {
-        try {
-            const userRef = doc(DB, 'vacancies', id);
-            await deleteDoc(userRef);
-            getData()
-            console.log(`User with UID: ${id} has been deleted.`);
-        } catch (error) {
-            console.error('Error deleting user:', error);
-        }
+    const handleDeleteClick = (id) => {
+        openDialog({
+            title: 'Confirmation ?',
+            message: 'Are you sure you want to delete this item?',
+            onConfirm: async () => {
+                try {
+                    const userRef = doc(DB, 'vacancies', id);
+                    await deleteDoc(userRef);
+                    getData()
+                    console.log(`User with UID: ${id} has been deleted.`);
+                } catch (error) {
+                    console.error('Error deleting user:', error);
+                }
+            },
+            onCancel: () => {
+                console.log('Delete canceled');
+            },
+        });
+
+
     }
 
     const columns = [

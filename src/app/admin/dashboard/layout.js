@@ -1,6 +1,7 @@
 "use client";
 
 import { AuthProvider } from "@/context/AuthContext";
+import { ConfirmationDialogProvider } from "@/context/ConfirmationDialogContext";
 import AuthGuard from "@/guards/AuthGuard";
 import { AdminDrawer } from "@/layout/admin/drawer";
 import AdminMenuAppBar from "@/layout/admin/header";
@@ -33,20 +34,21 @@ export default function AdminDashboardLayout({ children }) {
     return (
         <AuthProvider>
             <AuthGuard>
-                <Box sx={{ display: 'flex' }}>
+                <ConfirmationDialogProvider>
+                    <Box sx={{ display: 'flex' }}>
 
-                    <CssBaseline />
+                        <CssBaseline />
 
-                    <AdminMenuAppBar open={open} handleDrawerOpen={handleDrawerOpen} />
+                        <AdminMenuAppBar open={open} handleDrawerOpen={handleDrawerOpen} />
 
-                    <AdminDrawer open={open} handleDrawerClose={handleDrawerClose} />
+                        <AdminDrawer open={open} handleDrawerClose={handleDrawerClose} />
 
-                    <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
-                        <DrawerHeader />
-                        {children}
+                        <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
+                            <DrawerHeader />
+                            {children}
+                        </Box>
                     </Box>
-                </Box>
-
+                </ConfirmationDialogProvider>
             </AuthGuard>
         </AuthProvider>
     );
