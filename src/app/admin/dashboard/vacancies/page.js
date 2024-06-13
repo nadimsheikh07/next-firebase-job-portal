@@ -49,8 +49,8 @@ export default function Page() {
     }
 
     const columns = [
-        { field: 'title', headerName: 'Title', width: 150 },
-        { field: 'location', headerName: 'Location', width: 150 },
+        { field: 'title', headerName: 'Title', width: 200 },
+        { field: 'location', headerName: 'Location', width: 200 },
         {
             field: 'actions',
             type: 'actions',

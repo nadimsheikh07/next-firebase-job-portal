@@ -3,21 +3,18 @@
 import useAuth from "@/hooks/useAuth";
 import { Box, Button, Divider, Stack, TextField } from "@mui/material";
 import Link from "next/link";
-import { useForm } from "react-hook-form";
 import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useForm } from "react-hook-form";
 
 const SignInForm = () => {
     const { login } = useAuth();
-    const router = useRouter();
 
     const { register, handleSubmit, formState: { errors } } = useForm();
     const [firebaseError, setFirebaseError] = useState('');
 
     const onSubmit = async (data) => {
         try {
-            const response = await login(data.email, data.password);
-            router.push("/admin/dashboard")
+            await login(data.email, data.password);            
         } catch (error) {
             console.error("Error signing in:", error);
             setFirebaseError(error.message);
