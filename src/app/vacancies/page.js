@@ -76,7 +76,7 @@ export default function Page() {
                 {vacancies && vacancies.map((vacancy, index) => (
                     <Grid key={`vacancy-${index}`} item xs={12} sm={12} md={4} lg={4}>
                         <Card>
-                            <CardHeader title={vacancy.title} />
+                            <CardHeader title={vacancy.title} subheader={vacancy.location} />
                             <CardContent>
                                 <Typography>{vacancy.description}</Typography>
                             </CardContent>
