@@ -17,4 +17,9 @@ export const adminMenu = [
         link: "/admin/dashboard/vacancies",
         icon: "work"
     },
+    {
+        title: "Vacancy Applications",
+        link: "/admin/dashboard/vacancy_applications",
+        icon: "work"
+    },
 ]
