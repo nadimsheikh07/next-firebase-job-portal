@@ -42,6 +42,7 @@ export default function Page() {
                     const data = {
                         user: user.id,
                         vacancy: vacancy.id,
+                        status: "pending"
                     };
                     await addDoc(collectionRef, data);
                     setFirebaseSuccess("Application submitted successfully");

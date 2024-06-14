@@ -3,20 +3,22 @@
 import { DB } from "@/config/firebase";
 import { useConfirmationDialog } from "@/context/ConfirmationDialogContext";
 import DeleteIcon from '@mui/icons-material/DeleteOutlined';
-import EditIcon from '@mui/icons-material/Edit';
+import CancelIcon from '@mui/icons-material/CancelOutlined';
+import DoneIcon from '@mui/icons-material/DoneOutline';
 import { Box, Button } from "@mui/material";
 import { DataGrid, GridActionsCellItem } from '@mui/x-data-grid';
-import { collection, deleteDoc, doc, getDoc, getDocs } from "firebase/firestore";
+import { collection, deleteDoc, doc, getDoc, getDocs, updateDoc } from "firebase/firestore";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 export default function Page() {
     const router = useRouter();
     const { openDialog } = useConfirmationDialog();
-
+    const [loading, setLoading] = useState(true);
     const [vacancies, setVacancies] = useState([]);
 
     const getData = async () => {
+        setLoading(true);
         const col = collection(DB, 'vacancy_applications');
         const snapshot = await getDocs(col);
 
@@ -39,22 +41,54 @@ export default function Page() {
                     ...restData
                 });
             }
-            
+
         }
 
         setVacancies(vacancyApplications)
+        setLoading(false);
     }
 
     useEffect(() => {
         getData()
     }, [])
 
-    const handleNewClick = () => {
-        router.push(`/admin/dashboard/vacancy_applications/form/new`)
+
+    const handleRejectClick = (id) => {
+        openDialog({
+            title: 'Confirmation ?',
+            message: 'Are you sure you want to reject this item?',
+            onConfirm: async () => {
+                try {
+                    const docRef = doc(DB, 'vacancy_applications', id);
+                    await updateDoc(docRef, { status: "reject" });
+                    getData()
+                } catch (error) {
+                    console.error('Error deleting user:', error);
+                }
+            },
+            onCancel: () => {
+                console.log('reject canceled');
+            },
+        });
     }
 
-    const handleEditClick = (id) => {
-        router.push(`/admin/dashboard/vacancy_applications/form/${id}`)
+    const handleCompleteClick = (id) => {
+        openDialog({
+            title: 'Confirmation ?',
+            message: 'Are you sure you want to complete this item?',
+            onConfirm: async () => {
+                try {
+                    const docRef = doc(DB, 'vacancy_applications', id);
+                    await updateDoc(docRef, { status: "complete" });
+                    getData()
+                } catch (error) {
+                    console.error('Error deleting user:', error);
+                }
+            },
+            onCancel: () => {
+                console.log('complete canceled');
+            },
+        });
     }
 
     const handleDeleteClick = (id) => {
@@ -75,13 +109,12 @@ export default function Page() {
                 console.log('Delete canceled');
             },
         });
-
-
     }
 
     const columns = [
         { field: 'user', headerName: 'User', width: 200 },
         { field: 'vacancy', headerName: 'Vacancy', width: 200 },
+        { field: 'status', headerName: 'Status', width: 200 },
         {
             field: 'actions',
             type: 'actions',
@@ -92,11 +125,19 @@ export default function Page() {
 
                 return [
                     <GridActionsCellItem
-                        key={`edit-${id}`}
-                        icon={<EditIcon />}
-                        label="Edit"
+                        key={`reject-${id}`}
+                        icon={<CancelIcon />}
+                        label="Reject"
                         className="textPrimary"
-                        onClick={() => handleEditClick(id)}
+                        onClick={() => handleRejectClick(id)}
+                        color="inherit"
+                    />,
+                    <GridActionsCellItem
+                        key={`complete-${id}`}
+                        icon={<DoneIcon />}
+                        label="Complete"
+                        className="textPrimary"
+                        onClick={() => handleCompleteClick(id)}
                         color="inherit"
                     />,
                     <GridActionsCellItem
@@ -113,11 +154,7 @@ export default function Page() {
 
     return (
         <Box>
-            <Box mb={2}>
-                <Button variant="outlined" onClick={() => handleNewClick()}>Create</Button>
-            </Box>
-
-            <DataGrid rows={vacancies} columns={columns} />
+            <DataGrid loading={loading} rows={vacancies} columns={columns} />
         </Box>
     );
 }
