@@ -11,10 +11,11 @@ import { useEffect, useState } from "react";
 
 export default function Page() {
     const router = useRouter()
-
+    const [loading, setLoading] = useState(false);
     const [users, setUsers] = useState([]);
 
     const getData = async () => {
+        setLoading(true)
         const col = collection(DB, "users");
         const snapshot = await getDocs(col);
         setUsers(snapshot.docs.map(doc => {
@@ -23,6 +24,7 @@ export default function Page() {
                 ...doc.data()
             }
         }));
+        setLoading(false)
     }
 
     useEffect(() => {
@@ -86,7 +88,7 @@ export default function Page() {
             <Box mb={2}>
                 <Button variant="outlined" onClick={() => handleNewClick()}>Create</Button>
             </Box>
-            <DataGrid rows={users} columns={columns} />
+            <DataGrid loading={loading} rows={users} columns={columns} />
         </Box>
     );
 }

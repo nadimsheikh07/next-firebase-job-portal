@@ -13,10 +13,12 @@ import { useEffect, useState } from "react";
 export default function Page() {
     const router = useRouter();
     const { openDialog } = useConfirmationDialog();
+    const [loading, setLoading] = useState(false);
 
     const [vacancies, setVacancies] = useState([]);
 
     const getData = async () => {
+        setLoading(true)
         const col = collection(DB, "vacancies");
         const snapshot = await getDocs(col);
         setVacancies(snapshot.docs.map(doc => {
@@ -25,6 +27,7 @@ export default function Page() {
                 ...doc.data()
             }
         }));
+        setLoading(false)
     }
 
     useEffect(() => {
@@ -99,7 +102,7 @@ export default function Page() {
                 <Button variant="outlined" onClick={() => handleNewClick()}>Create</Button>
             </Box>
 
-            <DataGrid rows={vacancies} columns={columns} />
+            <DataGrid loading={loading} rows={vacancies} columns={columns} />
         </Box>
     );
 }

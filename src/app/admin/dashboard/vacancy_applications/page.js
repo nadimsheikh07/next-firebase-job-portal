@@ -2,19 +2,17 @@
 
 import { DB } from "@/config/firebase";
 import { useConfirmationDialog } from "@/context/ConfirmationDialogContext";
-import DeleteIcon from '@mui/icons-material/DeleteOutlined';
 import CancelIcon from '@mui/icons-material/CancelOutlined';
+import DeleteIcon from '@mui/icons-material/DeleteOutlined';
 import DoneIcon from '@mui/icons-material/DoneOutline';
-import { Box, Button } from "@mui/material";
+import { Box } from "@mui/material";
 import { DataGrid, GridActionsCellItem } from '@mui/x-data-grid';
 import { collection, deleteDoc, doc, getDoc, getDocs, updateDoc } from "firebase/firestore";
-import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 export default function Page() {
-    const router = useRouter();
     const { openDialog } = useConfirmationDialog();
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(false);
     const [vacancies, setVacancies] = useState([]);
 
     const getData = async () => {
