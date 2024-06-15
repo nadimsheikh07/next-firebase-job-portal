@@ -39,15 +39,23 @@ export default function Page() {
         router.push(`/admin/dashboard/users/form/${id}`)
     }
 
-    const handleDeleteClick = async (id) => {
-        try {
-            const userRef = doc(DB, 'users', id);
-            await deleteDoc(userRef);
-            getData()
-            console.log(`User with UID: ${id} has been deleted.`);
-        } catch (error) {
-            console.error('Error deleting user:', error);
-        }
+    const handleDeleteClick = (id) => {
+        openDialog({
+            title: 'Confirmation ?',
+            message: 'Are you sure you want to delete this item?',
+            onConfirm: async () => {
+                try {
+                    const userRef = doc(DB, 'users', id);
+                    await deleteDoc(userRef);
+                    getData()
+                } catch (error) {
+                    console.error('Error deleting:', error);
+                }
+            },
+            onCancel: () => {
+                console.log('Delete canceled');
+            },
+        });
     }
 
     const columns = [

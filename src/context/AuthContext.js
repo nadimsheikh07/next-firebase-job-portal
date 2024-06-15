@@ -1,15 +1,15 @@
 "use client"
 
-import PropTypes from 'prop-types';
-import { createContext, useEffect, useReducer, useState } from 'react';
+import { AUTH, DB } from '@/config/firebase';
 import {
-    signOut,
+    createUserWithEmailAndPassword,
     onAuthStateChanged,
     signInWithEmailAndPassword,
-    createUserWithEmailAndPassword,
+    signOut,
 } from 'firebase/auth';
 import { collection, doc, getDoc, setDoc } from 'firebase/firestore';
-import { AUTH, DB } from '@/config/firebase';
+import PropTypes from 'prop-types';
+import { createContext, useEffect, useReducer, useState } from 'react';
 
 const ADMIN_EMAILS = ['nadim.sheikh.07@gmail.com'];
 

@@ -51,17 +51,14 @@ export default function Page() {
                     const userRef = doc(DB, 'vacancies', id);
                     await deleteDoc(userRef);
                     getData()
-                    console.log(`User with UID: ${id} has been deleted.`);
                 } catch (error) {
-                    console.error('Error deleting user:', error);
+                    console.error('Error deleting:', error);
                 }
             },
             onCancel: () => {
                 console.log('Delete canceled');
             },
         });
-
-
     }
 
     const columns = [

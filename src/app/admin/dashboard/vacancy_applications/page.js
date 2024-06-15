@@ -61,11 +61,11 @@ export default function Page() {
                     await updateDoc(docRef, { status: "reject" });
                     getData()
                 } catch (error) {
-                    console.error('Error deleting user:', error);
+                    console.error('Error deleting:', error);
                 }
             },
             onCancel: () => {
-                console.log('reject canceled');
+                console.log('Reject canceled');
             },
         });
     }
@@ -80,11 +80,11 @@ export default function Page() {
                     await updateDoc(docRef, { status: "complete" });
                     getData()
                 } catch (error) {
-                    console.error('Error deleting user:', error);
+                    console.error('Error deleting:', error);
                 }
             },
             onCancel: () => {
-                console.log('complete canceled');
+                console.log('Complete canceled');
             },
         });
     }
@@ -98,9 +98,8 @@ export default function Page() {
                     const userRef = doc(DB, 'vacancy_applications', id);
                     await deleteDoc(userRef);
                     getData()
-                    console.log(`User with UID: ${id} has been deleted.`);
                 } catch (error) {
-                    console.error('Error deleting user:', error);
+                    console.error('Error deleting:', error);
                 }
             },
             onCancel: () => {
