@@ -1,5 +1,6 @@
 "use client";
 
+import { DataGridToolbar } from "@/components/dataGrid/toolBar";
 import { DB } from "@/config/firebase";
 import DeleteIcon from '@mui/icons-material/DeleteOutlined';
 import EditIcon from '@mui/icons-material/Edit';
@@ -31,7 +32,7 @@ export default function Page() {
         getData()
     }, [])
 
-    const handleNewClick = () => {
+    const handleAddClick = () => {
         router.push(`/admin/dashboard/users/form/new`)
     }
 
@@ -93,10 +94,14 @@ export default function Page() {
 
     return (
         <Box>
-            <Box mb={2}>
-                <Button variant="outlined" onClick={() => handleNewClick()}>Create</Button>
-            </Box>
-            <DataGrid loading={loading} rows={users} columns={columns} />
+            <DataGrid loading={loading} rows={users} columns={columns}
+                slots={{
+                    toolbar: DataGridToolbar,
+                }}
+                slotProps={{
+                    toolbar: { title: "Users", handleAddClick },
+                }}
+            />
         </Box>
     );
 }

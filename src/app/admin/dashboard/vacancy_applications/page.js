@@ -1,5 +1,6 @@
 "use client";
 
+import { DataGridToolbar } from "@/components/dataGrid/toolBar";
 import { DB } from "@/config/firebase";
 import { useConfirmationDialog } from "@/context/ConfirmationDialogContext";
 import CancelIcon from '@mui/icons-material/CancelOutlined';
@@ -151,7 +152,14 @@ export default function Page() {
 
     return (
         <Box>
-            <DataGrid loading={loading} rows={vacancies} columns={columns} />
+            <DataGrid loading={loading} rows={vacancies} columns={columns}
+                slots={{
+                    toolbar: DataGridToolbar,
+                }}
+                slotProps={{
+                    toolbar: { title: "Vacancy Applications" },
+                }}
+            />
         </Box>
     );
 }

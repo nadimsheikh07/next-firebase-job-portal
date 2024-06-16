@@ -1,5 +1,6 @@
 "use client";
 
+import { DataGridToolbar } from "@/components/dataGrid/toolBar";
 import { DB } from "@/config/firebase";
 import { useConfirmationDialog } from "@/context/ConfirmationDialogContext";
 import DeleteIcon from '@mui/icons-material/DeleteOutlined';
@@ -34,7 +35,7 @@ export default function Page() {
         getData()
     }, [])
 
-    const handleNewClick = () => {
+    const handleAddClick = () => {
         router.push(`/admin/dashboard/vacancies/form/new`)
     }
 
@@ -95,11 +96,14 @@ export default function Page() {
 
     return (
         <Box>
-            <Box mb={2}>
-                <Button variant="outlined" onClick={() => handleNewClick()}>Create</Button>
-            </Box>
-
-            <DataGrid loading={loading} rows={vacancies} columns={columns} />
+            <DataGrid loading={loading} rows={vacancies} columns={columns}
+                slots={{
+                    toolbar: DataGridToolbar,
+                }}
+                slotProps={{
+                    toolbar: { title: "Vacancies", handleAddClick },
+                }}
+            />
         </Box>
     );
 }
