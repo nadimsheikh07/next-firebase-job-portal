@@ -30,6 +30,7 @@ DataGridToolbar.propTypes = {
     handleAddClick: PropTypes.func,
     handleRefreshClick: PropTypes.func,
 }
+
 DataGridToolbar.defaultProps = {
     title: "",
     handleAddClick: null,
