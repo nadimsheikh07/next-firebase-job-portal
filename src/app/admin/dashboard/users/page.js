@@ -32,6 +32,10 @@ export default function Page() {
         getData()
     }, [])
 
+    const handleRefreshClick = () => {
+        getData()
+    }
+
     const handleAddClick = () => {
         router.push(`/admin/dashboard/users/form/new`)
     }
@@ -99,7 +103,7 @@ export default function Page() {
                     toolbar: DataGridToolbar,
                 }}
                 slotProps={{
-                    toolbar: { title: "Users", handleAddClick },
+                    toolbar: { title: "Users", handleAddClick, handleRefreshClick },
                 }}
             />
         </Box>

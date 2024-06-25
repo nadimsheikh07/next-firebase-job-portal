@@ -51,6 +51,9 @@ export default function Page() {
         getData()
     }, [])
 
+    const handleRefreshClick = () => {
+        getData()
+    }
 
     const handleRejectClick = (id) => {
         openDialog({
@@ -157,7 +160,7 @@ export default function Page() {
                     toolbar: DataGridToolbar,
                 }}
                 slotProps={{
-                    toolbar: { title: "Vacancy Applications" },
+                    toolbar: { title: "Vacancy Applications", handleRefreshClick },
                 }}
             />
         </Box>

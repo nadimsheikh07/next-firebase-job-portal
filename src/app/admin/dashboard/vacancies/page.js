@@ -35,6 +35,10 @@ export default function Page() {
         getData()
     }, [])
 
+    const handleRefreshClick = () => {
+        getData()
+    }
+
     const handleAddClick = () => {
         router.push(`/admin/dashboard/vacancies/form/new`)
     }
@@ -101,7 +105,7 @@ export default function Page() {
                     toolbar: DataGridToolbar,
                 }}
                 slotProps={{
-                    toolbar: { title: "Vacancies", handleAddClick },
+                    toolbar: { title: "Vacancies", handleAddClick,handleRefreshClick },
                 }}
             />
         </Box>
