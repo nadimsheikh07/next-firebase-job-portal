@@ -5,10 +5,13 @@ import { ConfirmationDialogProvider } from "@/context/ConfirmationDialogContext"
 import AuthGuard from "@/guards/AuthGuard";
 import { AdminDrawer } from "@/layout/admin/drawer";
 import AdminMenuAppBar from "@/layout/admin/header";
+import { Icon, IconButton } from "@mui/material";
 import Box from '@mui/material/Box';
 import CssBaseline from '@mui/material/CssBaseline';
 import { styled } from '@mui/material/styles';
+import { SnackbarProvider, closeSnackbar } from 'notistack';
 import * as React from 'react';
+
 
 const DrawerHeader = styled('div')(({ theme }) => ({
     display: 'flex',
@@ -32,24 +35,36 @@ export default function AdminDashboardLayout({ children }) {
     };
 
     return (
-        <AuthProvider>
-            <AuthGuard>
-                <ConfirmationDialogProvider>
-                    <Box sx={{ display: 'flex' }}>
+        <SnackbarProvider maxSnack={3} autoHideDuration={5000}
+            action={(snackbarId) => (
+                <IconButton onClick={() => {
+                    console.log('snackbarId', snackbarId)
+                    closeSnackbar(snackbarId)
+                }}>
+                    <Icon>close</Icon>
+                </IconButton>
+            )}
+            anchorOrigin={{ vertical: "top", horizontal: "center" }}
+        >
+            <AuthProvider>
+                <AuthGuard>
+                    <ConfirmationDialogProvider>
+                        <Box sx={{ display: 'flex' }}>
 
-                        <CssBaseline />
+                            <CssBaseline />
 
-                        <AdminMenuAppBar open={open} handleDrawerOpen={handleDrawerOpen} />
+                            <AdminMenuAppBar open={open} handleDrawerOpen={handleDrawerOpen} />
 
-                        <AdminDrawer open={open} handleDrawerClose={handleDrawerClose} />
+                            <AdminDrawer open={open} handleDrawerClose={handleDrawerClose} />
 
-                        <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
-                            <DrawerHeader />
-                            {children}
+                            <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
+                                <DrawerHeader />
+                                {children}
+                            </Box>
                         </Box>
-                    </Box>
-                </ConfirmationDialogProvider>
-            </AuthGuard>
-        </AuthProvider>
+                    </ConfirmationDialogProvider>
+                </AuthGuard>
+            </AuthProvider>
+        </SnackbarProvider>
     );
 }

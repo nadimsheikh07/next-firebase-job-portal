@@ -1,18 +1,19 @@
 "use client";
 
 import { AUTH, DB } from "@/config/firebase";
-import { Alert, Box, Button, Stack, TextField } from "@mui/material";
+import { Box, Button, Stack, TextField } from "@mui/material";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { collection, doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useSnackbar } from 'notistack';
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 
 export default function Page({ params }) {
     const { id } = params
     const router = useRouter()
-    const [firebaseError, setFirebaseError] = useState('');
+    const { enqueueSnackbar } = useSnackbar()
 
     const {
         register,
@@ -45,14 +46,35 @@ export default function Page({ params }) {
                         lastName: data.lastName
                     });
                 }
+
+                enqueueSnackbar("User created successfully", { variant: "success" });
             } else {
                 const docRef = doc(DB, 'users', id);
                 await updateDoc(docRef, data);
+                enqueueSnackbar("User updated successfully", { variant: "success" });
             }
+
             router.push('/admin/dashboard/users')
         } catch (error) {
             console.error("Error signUpg in:", error);
-            setFirebaseError(error.message);
+            // Handle specific Firebase auth errors
+            switch (error.code) {
+                case 'auth/email-already-in-use':
+                    enqueueSnackbar("This email is already in use.", { variant: "error" });
+                    break;
+                case 'auth/invalid-email':
+                    enqueueSnackbar("Invalid email address.", { variant: "error" });
+                    break;
+                case 'auth/operation-not-allowed':
+                    enqueueSnackbar("Operation not allowed. Please contact support.", { variant: "error" });
+                    break;
+                case 'auth/weak-password':
+                    enqueueSnackbar("Weak password. Please choose a stronger password.", { variant: "error" });
+                    break;
+                default:
+                    enqueueSnackbar("An unknown error occurred: " + error.message, { variant: "error" });
+                    break;
+            }
         }
     }
 
@@ -76,86 +98,77 @@ export default function Page({ params }) {
     }, [])
 
     return (
-        <Box>
-            <form onSubmit={handleSubmit(onSubmit)}>
+        <form onSubmit={handleSubmit(onSubmit)}>
 
+            <Box mt={2} mb={2}>
+                <TextField
+                    label="Email"
+                    variant="outlined"
+                    id="email"
+                    type="email"
+                    fullWidth
+                    {...register("email", { required: "Email is required" })}
+                    error={!!errors.email}
+                    helperText={errors.email ? errors.email.message : ''}
+                />
+            </Box>
 
-                <Box mt={2} mb={2}>
-                    <TextField
-                        label="Email"
-                        variant="outlined"
-                        id="email"
-                        type="email"
-                        fullWidth
-                        {...register("email", { required: "Email is required" })}
-                        error={!!errors.email}
-                        helperText={errors.email ? errors.email.message : ''}
-                    />
-                </Box>
+            <Box mt={2} mb={2}>
+                <TextField
+                    label="First Name"
+                    variant="outlined"
+                    id="firstName"
+                    type="text"
+                    fullWidth
+                    {...register("firstName", { required: "First Name is required" })}
+                    error={!!errors.firstName}
+                    helperText={errors.firstName ? errors.firstName.message : ''}
+                />
+            </Box>
 
-                <Box mt={2} mb={2}>
-                    <TextField
-                        label="First Name"
-                        variant="outlined"
-                        id="firstName"
-                        type="text"
-                        fullWidth
-                        {...register("firstName", { required: "First Name is required" })}
-                        error={!!errors.firstName}
-                        helperText={errors.firstName ? errors.firstName.message : ''}
-                    />
-                </Box>
+            <Box mt={2} mb={2}>
+                <TextField
+                    label="Last Name"
+                    variant="outlined"
+                    id="lastName"
+                    type="text"
+                    fullWidth
+                    {...register("lastName", { required: "Last Name is required" })}
+                    error={!!errors.lastName}
+                    helperText={errors.lastName ? errors.lastName.message : ''}
+                />
+            </Box>
 
-                <Box mt={2} mb={2}>
-                    <TextField
-                        label="Last Name"
-                        variant="outlined"
-                        id="lastName"
-                        type="text"
-                        fullWidth
-                        {...register("lastName", { required: "Last Name is required" })}
-                        error={!!errors.lastName}
-                        helperText={errors.lastName ? errors.lastName.message : ''}
-                    />
-                </Box>
+            <Box mt={2} mb={2}>
+                <TextField
+                    label="Phone Number"
+                    variant="outlined"
+                    id="phoneNumber"
+                    type="text"
+                    fullWidth
+                    {...register("phoneNumber", { required: "Phone Number is required" })}
+                    error={!!errors.phoneNumber}
+                    helperText={errors.phoneNumber ? errors.phoneNumber.message : ''}
+                />
+            </Box>
 
-                <Box mt={2} mb={2}>
-                    <TextField
-                        label="Phone Number"
-                        variant="outlined"
-                        id="phoneNumber"
-                        type="text"
-                        fullWidth
-                        {...register("phoneNumber", { required: "Phone Number is required" })}
-                        error={!!errors.phoneNumber}
-                        helperText={errors.phoneNumber ? errors.phoneNumber.message : ''}
-                    />
-                </Box>
+            <Box mt={2} mb={2}>
+                <TextField
+                    label="Password"
+                    variant="outlined"
+                    id="password"
+                    type="password"
+                    fullWidth
+                    {...register("password", { required: "Password is required" })}
+                    error={!!errors.password}
+                    helperText={errors.password ? errors.password.message : ''}
+                />
+            </Box>
 
-                <Box mt={2} mb={2}>
-                    <TextField
-                        label="Password"
-                        variant="outlined"
-                        id="password"
-                        type="password"
-                        fullWidth
-                        {...register("password", { required: "Password is required" })}
-                        error={!!errors.password}
-                        helperText={errors.password ? errors.password.message : ''}
-                    />
-                </Box>
-
-                {firebaseError && (
-                    <Box mt={2} mb={2}>
-                        <Alert severity="error" onClose={() => { setFirebaseError("") }}>{firebaseError}</Alert>
-                    </Box>
-                )}
-
-                <Stack direction="row" spacing={2}>
-                    <Button variant="outlined" type="submit">Submit</Button>
-                    <Button variant="outlined" color="error" component={Link} href="/admin/dashboard/users">Cancel</Button>
-                </Stack>
-            </form>
-        </Box>
+            <Stack direction="row" spacing={2}>
+                <Button variant="outlined" type="submit">Submit</Button>
+                <Button variant="outlined" color="error" component={Link} href="/admin/dashboard/users">Cancel</Button>
+            </Stack>
+        </form>
     )
 }
